@@ -21,7 +21,7 @@ public class StringTest {
     @Test
     void substring_테스트() {
         String str = "(1,2,3,5)";
-        String substring = str.substring(1, str.length() - 1);
+        String substring = str.substring(1, str.length() - 1);      //  substring으로 괄호를 자를때는 입력이 바뀔걸 대비해서 str.length() - 1 이렇게 to부분을 문자열 길이에서 1을 뺀다
 
         assertThat(substring).isEqualTo("1,2,3,5");
     }
