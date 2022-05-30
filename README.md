@@ -69,3 +69,23 @@
 2. cd build/libs
 3. java -jar hello-spring-0.0.1-SNAPSHOT.jar 서버 배포시 파일 복사해서 이렇게 하면 서버에서도 스프링이 동작함
 4. 실행 확인
+
+### * 스프링 웹 개발 기초
+1. 정적컨텐츠 : 그냥 파일을 그대로 고객한테 전달해주는것 웹브라우저에 전달해주는 것
+2. MVC(Model, View, Controller)와 템플릿 엔진 : 서버에서 변형해서 HTML을 바꿔서 전달해주는 것
+   - => 템플릿 엔진을 모델, 뷰, 컨트롤러 방식으로 쪼개서 뷰를 템플릿 엔진으로 html을 좀 더 프로그래밍 한걸로 랜더링해서 랜더링이 된 html을 고객에게 전달해준다
+3. API : 서버와 데이터베이스에 대한 출입구 역할 및 모든 접속을 표준화시켜준다
+- MVC
+  1) View : 화면을 그리는데 모든 역량을 집중해야됨
+  2) Controller : 비즈니스로직과 관련이 있거나 내부적인걸 처리하는데 집중
+  3) Model : 관련된 화면에서 필요한 것들을 담아서 넘겨주는 것
+4. JSON : 키 밸류로 이루어진 구조 (키 : 밸류)
+5. @ResponseBody 를 사용
+   - HTTP의 BODY에 문자 내용을 직접 반환
+   - viewResolver 대신에 HttpMessageConverter 가 동작
+   - 기본 문자처리: StringHttpMessageConverter
+   - 기본 객체처리: MappingJackson2HttpMessageConverter
+   - byte 처리 등등 기타 여러 HttpMessageConverter가 기본으로 등록되어 있음
+   - 결론 : 요즘엔 거의 JASON만 쓴다.
+
+### * 회원 관리 예제 - 백엔드 개발
