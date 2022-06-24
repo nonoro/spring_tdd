@@ -2,7 +2,10 @@ package calculator;
 
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.ValueSource;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -17,35 +20,48 @@ public class CalculatorTest {
         assertThat(str.split(" ")).containsExactly(expectedValue);
     }
 
-    @Test
-    void 타입확인_숫자() {
-        String[] strArr = {"1", "2", "3", "4", "s" };
+    @ParameterizedTest
+    @ValueSource(strings = {"2", "10", "/", "+", "-7"})
+    void 타입확인_숫자(String input) {
+        InputValue value = new InputValue(input);
+        assertThat(value.isNumber()).isTrue();
 
-        assertThat(new InputValue(strArr).isNumber()).isTrue();
-        assertThat(new InputValue("-10").isNumber()).isTrue();
     }
 
-    @Test
-    void 타입확인_연산자() {
-        assertThat(new InputValue("+").isOperator()).isTrue();
-        assertThat(new InputValue("-").isOperator()).isTrue();
-        assertThat(new InputValue("*").isOperator()).isTrue();
-        assertThat(new InputValue("/").isOperator()).isTrue();
+    @ParameterizedTest
+    @ValueSource(strings = { "/", "+"})
+    void 타입확인_숫자불일치(String input) {
+        InputValue value = new InputValue(input);
+        assertThat(value.isNumber()).isFalse();
 
-        assertThatThrownBy(() -> new InputValue("#")).isInstanceOf(IllegalArgumentException.class);
-        assertThatThrownBy(() -> new InputValue("**")).isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"4", "+", "*", "11", "/", "-"})
+    void 타입확인_연산자(String input) {
+        InputValue value = new InputValue(input);
+        assertThat(value.isOperator()).isTrue();
+
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = {"4", "11"})
+    void 타입확인_연산자불일치(String input) {
+        InputValue value = new InputValue(input);
+        assertThat(value.isOperator()).isFalse();
+
     }
 
     @Test
     void equalsTest() {
-        InputValue inputValue = new InputValue("5");
+        InputValue inputValue = new InputValue("10");
 
-        assertThat(inputValue).isEqualTo(new InputValue("5"));
+        assertThat(inputValue).isEqualTo(new InputValue("10"));
     }
 
     @Test
     void inputTest() {
-        Calculator calculator = new Calculator();
+        Calculator calculator = new StringCalculator();
         calculator.input("2 + 3 * 4 / 2");
 
         List<InputValue> inputValues = calculator.getValues();
@@ -63,12 +79,12 @@ public class CalculatorTest {
 
     @Test
     void calculate() {
-        Calculator calculator = new Calculator();
+        Calculator calculator = new StringCalculator();
 
-        calculator.input("2 + 3 * 4 / 2");
-        assertThat(calculator.calculate()).isEqualTo(10);
+        calculator.input("1 + 2 / 3 * 4 + 5");
+        assertThat(calculator.calculate()).isEqualTo(9);
 
-        calculator.input("2 + 2 * 4 / 1");
-        assertThat(calculator.calculate()).isEqualTo(16);
+//        calculator.input("2 + 2 * 4 / 1");
+//        assertThat(calculator.calculate()).isEqualTo(16);
     }
 }

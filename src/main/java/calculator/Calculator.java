@@ -2,15 +2,12 @@ package calculator;
 
 import java.util.List;
 
-public class Calculator {
-    public void input(String s) {
-    }
+public interface Calculator {
+    void input(String value);
 
-    public List<InputValue> getValues() {
-        return null;
-    }
+    int calculate();
 
-    public Integer calculate() {
-        return null;
-    }
+    List<InputValue> getValues();
 }
+
+

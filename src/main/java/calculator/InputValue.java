@@ -1,37 +1,73 @@
 package calculator;
 
+import java.util.Arrays;
+import java.util.Objects;
+import java.util.Optional;
+
+
 public class InputValue {
-    public boolean InputValue(String s) {
-        if (isStringDouble(s)) {
-            return true;
-        } else {
-            return false;
-        }
+    private static String[] OPERATORES = {"+", "-", "*", "/"};
+    private final String value;
+    private InputType type;
+
+    public InputValue(String value) {
+        setType(value);
+        this.value = value;
     }
 
-    private boolean isStringDouble(String s) {
+    public String getValue() {
+        return value;
+    }
+
+    private void setType(String value) {
         try {
-            Double.parseDouble(s);
-            return true;
+            Integer.parseInt(value);
+            type = InputType.NUMBER;
         } catch (NumberFormatException e) {
-            return false;
+            isValidateOperator(value);
+            type = InputType.OPERATOR;
         }
     }
 
-    public boolean isNumber(String s) {
-        boolean result = true;
+    private void isValidateOperator(String value) {
+        Optional<String> availableOperator = Arrays.stream(OPERATORES)
+                .filter(op -> op.equals(value))
+                .findAny();
 
-        if (s == null || s.length() == 0) {
-            result = false;
-        } else {
-            for (int i = 0; i < s.length(); i++) {
-                int c = (int) s.charAt(i);
+        availableOperator.orElseThrow(() -> new IllegalArgumentException(value + "는 지원하지 않는 연산자 입니다"));
+//        for (String operator : OPERATORES) {
+//            if (value.equals(operator)) {
+//                return;
+//            }
+//        }
+//
+//        throw new IllegalStateException(value + "는 지원하지 않는 연산자 입니다");
+//    }
+    }
 
-                if (c < 48 || c > 57) {
-                    result = false;
-                }
-            }
+    public boolean isNumber() {
+        return type.equals(InputType.NUMBER);
+    }
+
+    public boolean isOperator() {
+        return type.equals(InputType.OPERATOR);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {
+            return true;
         }
-        return result;
+
+        if (!(o instanceof InputValue)) {
+            return false;
+        }
+        InputValue that = (InputValue) o;
+        return type == that.type && Objects.equals(value, that.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(type, value);
     }
 }
